@@ -1,12 +1,45 @@
-Implementation of a Symmetric Hash Join operator inside PostgreSQL.
+PostgreSQL Symmetric Hash Join
+Overview
 
-This project replaces the traditional Hash Join with a fully pipelined Symmetric Hash Join algorithm by modifying both the PostgreSQL optimizer and executor components.
+This project implements a Symmetric Hash Join (SHJ) operator inside PostgreSQL, replacing the traditional Hash Join algorithm.
 
-Key modifications:
-- Bidirectional hash probing
-- Pipelined hash node execution
-- Removal of batch-based hybrid hashing
-- Custom HashJoinState redesign
+The implementation modifies both:
 
-Language: C  
-System-level database engine modification
+Query Optimizer
+
+Query Executor
+
+Motivation
+
+Traditional Hash Join is blocking: it must build the entire inner hash table before producing output.
+Symmetric Hash Join removes this bottleneck by incrementally processing both relations.
+
+Key Features
+
+Two hash tables (one per relation)
+
+Alternating tuple processing
+
+Fully pipelined execution
+
+Modified HashJoinState for bidirectional probing
+
+Disabled hybrid batching for simplified memory model
+
+Modified Files
+
+nodeHashjoin.c
+
+nodeHash.c
+
+execnodes.h
+
+createplan.c
+
+Technologies
+
+C
+
+PostgreSQL internals
+
+Query execution engine modification
